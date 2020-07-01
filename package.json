@@ -30,5 +30,8 @@
     "mime": "^2.4.6",
     "minio": "^7.0.16",
     "node-minio": "^1.0.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   }
 }
