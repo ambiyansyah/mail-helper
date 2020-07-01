@@ -1,7 +1,7 @@
 {
   "name": "@btpns-komodo/mail-helper",
   "version": "1.0.0",
-  "description": "This tool help you to forward your email data into REST API endpoint",
+  "description": "This tool helps you to forward your email data into a REST API endpoint",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
