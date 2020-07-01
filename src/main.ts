@@ -5,50 +5,49 @@ import axios from 'axios';
 import { parse } from 'path';
 
 export interface Config {
-  sendMailAPI: string,
-  minioConfig: Minio.ClientOptions
+  sendMailAPI: string;
+  minioConfig: Minio.ClientOptions;
 }
 
 export interface MailData {
-  from: string,
-  to: string,
-  cc: string,
-  bcc: string,
-  subject: string,
-  body: string,
+  from: string;
+  to: string;
+  cc: string;
+  bcc: string;
+  subject: string;
+  body: string;
 }
 
 export interface RequestMailData extends MailData {
   attachmentObject: {
-    bucketName: string,
-    objectname: string,
-  },
+    bucketName: string;
+    objectname: string;
+  };
 }
 
 export interface AttachmentFile {
-  filename: string,
-  mimetype: string | null,
-  base64: string,
+  filename: string;
+  mimetype: string | null;
+  base64: string;
 }
 
 export interface ParseMailData extends MailData {
-  attachment?: AttachmentFile,
+  attachment?: AttachmentFile;
 }
 
 export class MailHelper {
-
   constructor(public config: Config) {
-    this.config = config
+    this.config = config;
   }
 
   public async sendMail(req: RequestMailData): Promise<any> {
     try {
-      let parseMailData: ParseMailData = await this.parseMail(req)
-      let res = await axios.post(this.config.sendMailAPI, parseMailData)
-      
-      return res.data
+      const parseMailData: ParseMailData = await this.parseMail(req);
+      const res = await axios.post(this.config.sendMailAPI, parseMailData);
+
+      return res.data;
     } catch (err) {
-      throw new Error(err.message)
+      throw new Error(err.message);
     }
   }
 
@@ -61,39 +60,44 @@ export class MailHelper {
         bcc: req.bcc,
         subject: req.subject,
         body: req.body,
-      }
+      };
 
       if (req.attachmentObject) {
-        let attachment = await this.getAttachmentFile(req.attachmentObject.bucketName, req.attachmentObject.objectname)
-        
+        const attachment = await this.getAttachmentFile(
+          req.attachmentObject.bucketName,
+          req.attachmentObject.objectname
+        );
+
         parseMailData = {
           ...parseMailData,
           attachment,
-        }
+        };
       }
 
-      return parseMailData
+      return parseMailData;
     } catch (err) {
-      throw new Error(err.message)
+      throw new Error(err.message);
     }
   }
 
-  public async getAttachmentFile(bucketName: string, objectName: string): Promise<AttachmentFile> {
+  public async getAttachmentFile(
+    bucketName: string,
+    objectName: string
+  ): Promise<AttachmentFile> {
     try {
-      const minioClient = new Minio.Client(this.config.minioConfig)
-      const filepath = `/tmp/${objectName}`
-      
-      await minioClient.fGetObject(bucketName, objectName, filepath)
+      const minioClient = new Minio.Client(this.config.minioConfig);
+      const filepath = `/tmp/${objectName}`;
 
-      let filename = filepath.replace(/^.*[\\\/]/, '')
-      let mimetype = mime.getType(filepath)
-      let base64 = await fs.readFile(filepath, { encoding: 'base64' })
-      let result: AttachmentFile = { filename, mimetype, base64 }
+      await minioClient.fGetObject(bucketName, objectName, filepath);
 
-      return result
+      const filename = filepath.replace(/^.*[\\\/]/, '');
+      const mimetype = mime.getType(filepath);
+      const base64 = await fs.readFile(filepath, { encoding: 'base64' });
+      const result: AttachmentFile = { filename, mimetype, base64 };
+
+      return result;
     } catch (err) {
-      throw new Error(err.message)
+      throw new Error(err.message);
     }
   }
-
 }

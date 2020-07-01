@@ -1,12 +1,12 @@
-import { MailHelper, Config } from './main'
-import { requestMailData, parseMailData } from './main.mock'
-import axios from 'axios'
-import { parse } from 'path';
+import { MailHelper, Config } from './main';
+import { requestMailData, parseMailData } from './main.mock';
+import axios from 'axios';
 
-let mailHelper: MailHelper
+let mailHelper: MailHelper;
 
 jest.mock('axios');
 
+// tslint:disable-next-line: typedef
 beforeAll(() => {
   const config: Config = {
     sendMailAPI: 'localhost.dev/send',
@@ -15,36 +15,36 @@ beforeAll(() => {
       port: 9000,
       useSSL: true,
       accessKey: 'Q3AM3UQ867SPQQA43P2F',
-      secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG'
-    }
-  }
+      secretKey: 'zuf+tfteSlswRu7BJ86wekitnifILbZam1KYY3TG',
+    },
+  };
 
-  mailHelper = new MailHelper(config)
+  mailHelper = new MailHelper(config);
 
   const mockedAxios = axios as jest.Mocked<typeof axios>;
   mockedAxios.post.mockResolvedValue({
     data: {
-      'message': 'test'
-    }
-  })
-})
+      message: 'test',
+    },
+  });
+});
 
 test('should return mail data with attachment', async () => {
-  let parseMail = await mailHelper.parseMail(requestMailData)
-  expect(parseMail).toStrictEqual(parseMailData)
-})
+  const parseMail = await mailHelper.parseMail(requestMailData);
+  expect(parseMail).toStrictEqual(parseMailData);
+});
 
 test('should return mail data without attachment', async () => {
-  let req = requestMailData
-  let res = parseMailData
-  delete req.attachmentObject
-  delete res.attachment
+  const req = requestMailData;
+  const res = parseMailData;
+  delete req.attachmentObject;
+  delete res.attachment;
 
-  let parseMail = await mailHelper.parseMail(req)
-  expect(parseMail).toStrictEqual(res)
-})
+  const parseMail = await mailHelper.parseMail(req);
+  expect(parseMail).toStrictEqual(res);
+});
 
 test('should return success response from API', async () => {
-  let res = await mailHelper.sendMail(requestMailData)
-  expect(res).toStrictEqual({ 'message': 'test' })
-})
+  const res = await mailHelper.sendMail(requestMailData);
+  expect(res).toStrictEqual({ message: 'test' });
+});
