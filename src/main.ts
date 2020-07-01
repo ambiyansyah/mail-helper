@@ -1,12 +1,14 @@
 import * as Minio from 'minio';
 import * as mime from 'mime';
 import { promises as fs } from 'fs';
-import axios from 'axios';
-import { parse } from 'path';
+import axios, { AxiosResponse } from 'axios';
 
 export interface Config {
-  sendMailAPI: string;
-  minioConfig: Minio.ClientOptions;
+  api: {
+    sendMailEndpoint: string;
+    sendMailHeaders: object;
+  };
+  minio: Minio.ClientOptions;
 }
 
 export interface MailData {
@@ -40,12 +42,16 @@ export class MailHelper {
     this.config = config;
   }
 
-  public async sendMail(req: RequestMailData): Promise<any> {
+  public async sendMail(req: RequestMailData): Promise<AxiosResponse> {
     try {
       const parseMailData: ParseMailData = await this.parseMail(req);
-      const res = await axios.post(this.config.sendMailAPI, parseMailData);
+      const res = await axios.post(
+        this.config.api.sendMailEndpoint,
+        parseMailData,
+        { headers: this.config.api.sendMailHeaders }
+      );
 
-      return res.data;
+      return res;
     } catch (err) {
       throw new Error(err.message);
     }
@@ -85,7 +91,7 @@ export class MailHelper {
     objectName: string
   ): Promise<AttachmentFile> {
     try {
-      const minioClient = new Minio.Client(this.config.minioConfig);
+      const minioClient = new Minio.Client(this.config.minio);
       const filepath = `/tmp/${objectName}`;
 
       await minioClient.fGetObject(bucketName, objectName, filepath);

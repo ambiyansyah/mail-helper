@@ -6,11 +6,22 @@ let mailHelper: MailHelper;
 
 jest.mock('axios');
 
-// tslint:disable-next-line: typedef
 beforeAll(() => {
   const config: Config = {
-    sendMailAPI: 'localhost.dev/send',
-    minioConfig: {
+    api: {
+      sendMailEndpoint: 'mail-int-dirty.apps.nww.syariahbtpn.com/send',
+      sendMailHeaders: {
+        'Content-Type': 'application/json',
+        'X-Channel-Id': '6022',
+        'X-Node': 'BTPNS',
+        'X-Correlation-Id': 'TBnhJ7INcgnpI93OuMzfLoTa',
+        'X-Stan-Id': '000000000000000000000022',
+        'X-Transmission-Date-Time': '2019-09-16 19:03:15.475',
+        'X-Terminal-Id': '358525071384733',
+        'X-Api-Version': '1.3.0',
+      },
+    },
+    minio: {
       endPoint: 'play.min.io',
       port: 9000,
       useSSL: true,
@@ -22,11 +33,7 @@ beforeAll(() => {
   mailHelper = new MailHelper(config);
 
   const mockedAxios = axios as jest.Mocked<typeof axios>;
-  mockedAxios.post.mockResolvedValue({
-    data: {
-      message: 'test',
-    },
-  });
+  mockedAxios.post.mockResolvedValue({});
 });
 
 test('should return mail data with attachment', async () => {
@@ -46,5 +53,5 @@ test('should return mail data without attachment', async () => {
 
 test('should return success response from API', async () => {
   const res = await mailHelper.sendMail(requestMailData);
-  expect(res).toStrictEqual({ message: 'test' });
+  expect(res).toStrictEqual({});
 });

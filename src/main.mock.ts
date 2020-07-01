@@ -1,12 +1,12 @@
 import { RequestMailData, ParseMailData } from './main';
 
 export let requestMailData: RequestMailData = {
-  from: 'komodo@localhost.dev',
-  to: 'other@localhost.dev',
+  from: 'agilesquad.komodo@btpnsyariah.com',
+  to: 'v-risyal.ambiyansyah@btpnsyariah.com',
   cc: '',
   bcc: '',
-  subject: 'test',
-  body: 'test',
+  body: 'this is from komodo',
+  subject: 'testing',
   attachmentObject: {
     bucketName: 'komodo',
     objectname: 'some_data/dummy.pdf',
@@ -14,12 +14,12 @@ export let requestMailData: RequestMailData = {
 };
 
 export let parseMailData: ParseMailData = {
-  from: 'komodo@localhost.dev',
-  to: 'other@localhost.dev',
+  from: 'agilesquad.komodo@btpnsyariah.com',
+  to: 'v-risyal.ambiyansyah@btpnsyariah.com',
   cc: '',
   bcc: '',
-  subject: 'test',
-  body: 'test',
+  body: 'this is from komodo',
+  subject: 'testing',
   attachment: {
     filename: 'dummy.pdf',
     mimetype: 'application/pdf',
