@@ -9,11 +9,11 @@ jest.mock('axios');
 beforeAll(() => {
   const config: Config = {
     api: {
-      sendMailEndpoint: 'mail-int-dirty.apps.nww.syariahbtpn.com/send',
+      sendMailEndpoint: 'mail.gateway.com/send',
       sendMailHeaders: {
         'Content-Type': 'application/json',
         'X-Channel-Id': '6022',
-        'X-Node': 'BTPNS',
+        'X-Node': 'IND',
         'X-Correlation-Id': 'TBnhJ7INcgnpI93OuMzfLoTa',
         'X-Stan-Id': '000000000000000000000022',
         'X-Transmission-Date-Time': '2019-09-16 19:03:15.475',
