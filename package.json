@@ -10,7 +10,10 @@
     "lint:ts": "tslint 'src/**/*.{ts,tsx,js}'"
   },
   "keywords": [
-    "mail helper"
+    "minio",
+    "rest",
+    "mail",
+    "helper"
   ],
   "author": "Ambiyansyah Risyal",
   "license": "MIT",
